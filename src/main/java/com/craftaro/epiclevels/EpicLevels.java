@@ -144,7 +144,9 @@ public class EpicLevels extends SongodaPlugin {
         initDatabase(Collections.singletonList(new _1_InitialMigration(this)));
         this.dataHelper = new DataHelper(this);
 
-        this.dataHelper.getPlayers((player) -> this.playerManager.addPlayers(player));
+        if (Settings.LOAD_ALL_PLAYERS.getBoolean(false)) {
+            this.dataHelper.getPlayers((player) -> this.playerManager.addPlayers(player));
+        }
         this.dataHelper.getBoosts((uuidBoostMap -> this.boostManager.addBoosts(uuidBoostMap)));
     }
 
