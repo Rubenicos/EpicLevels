@@ -3,12 +3,12 @@ description: ${project.description}
 version: ${project.version}
 api-version: 1.13
 
-main: com.craftaro.epiclevels.EpicLevels
+main: com.songoda.epiclevels.EpicLevels
 softdepend:
   - Vault
   - PlaceholderAPI
 
-author: Craftaro
+author: Songoda
 website: ${project.url}
 
 commands:

@@ -1,16 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.craftaro</groupId>
+    <groupId>com.songoda</groupId>
     <artifactId>EpicLevels-Plugin</artifactId>
-    <version>2.1.1</version>
+    <version>3.0.0</version>
 
     <name>EpicLevels</name>
     <description>Allow your players to gain experience and level up by fighting players and monsters.</description>
-    <url>https://craftaro.com/marketplace/product/44</url>
+    <url>https://songoda.com/product/epiclevels-9</url>
 
     <properties>
         <maven.compiler.release>8</maven.compiler.release>
@@ -20,14 +17,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <issueManagement>
-        <url>https://discord.gg/craftaro</url>
-        <system>Discord server</system>
-    </issueManagement>
-
     <scm>
-        <url>https://github.com/craftaro/EpicLevels</url>
-        <connection>scm:git:git://github.com/craftaro/EpicLevels.git</connection>
+        <url>https://github.com/Songoda-Plugins/EpicLevels</url>
+        <connection>scm:git:git://github.com/Songoda-Plugins/EpicLevels.git</connection>
     </scm>
 
     <build>
@@ -53,8 +45,8 @@
 
                             <relocations>
                                 <relocation>
-                                    <pattern>com.craftaro.core</pattern>
-                                    <shadedPattern>com.craftaro.epiclevels.core</shadedPattern>
+                                    <pattern>com.songoda.core</pattern>
+                                    <shadedPattern>com.songoda.epiclevels.core</shadedPattern>
                                 </relocation>
                             </relocations>
 
@@ -70,7 +62,7 @@
                                 </filter>
 
                                 <filter>
-                                    <artifact>com.craftaro:CraftaroCore</artifact>
+                                    <artifact>com.songoda:SongodaCore</artifact>
                                     <excludeDefaults>false</excludeDefaults>
                                     <includes>
                                         <include>**/nms/v*/**</include>
@@ -104,8 +96,8 @@
 
     <repositories>
         <repository>
-            <id>craftaro-minecraft-plugins</id>
-            <url>https://repo.craftaro.com/repository/minecraft-plugins/</url>
+            <id>songoda-minecraft-plugins</id>
+            <url>https://repo.songoda.com/repository/minecraft-plugins/</url>
         </repository>
 
         <repository>
@@ -121,9 +113,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.craftaro</groupId>
-            <artifactId>CraftaroCore</artifactId>
-            <version>3.3.0-SNAPSHOT</version>
+            <groupId>com.songoda</groupId>
+            <artifactId>SongodaCore</artifactId>
+            <version>3.9.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
 
@@ -138,7 +130,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.18.2-R0.1-SNAPSHOT</version>
+            <version>1.21.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
