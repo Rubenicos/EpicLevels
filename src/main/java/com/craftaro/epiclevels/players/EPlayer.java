@@ -18,6 +18,38 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class EPlayer {
+    private static double START_EXP;
+    private static boolean ALLOW_NEGATIVE;
+    private static double KILLSTREAK_BONUS_EXP;
+    private static boolean SEND_BROADCAST_LEVELUP_MESSAGE;
+    private static int BROADCAST_LEVELUP_EVERY;
+    private static double MAX_EXP;
+    private static int GRINDER_MAX;
+    private static int GRINDER_INTERVAL;
+    private static int MAX_LEVEL;
+    private static Formula LEVELING_FORMULA;
+    private static double EXPONENTIAL_BASE;
+    private static double EXPONENTIAL_DIVISOR;
+    private static double LINEAR_INCREMENT;
+    private static String CUSTOM_FORMULA;
+
+    public static void reload() {
+        START_EXP = Settings.START_EXP.getDouble();
+        ALLOW_NEGATIVE = Settings.ALLOW_NEGATIVE.getBoolean();
+        KILLSTREAK_BONUS_EXP = Settings.KILLSTREAK_BONUS_EXP.getDouble();
+        SEND_BROADCAST_LEVELUP_MESSAGE = Settings.SEND_BROADCAST_LEVELUP_MESSAGE.getBoolean();
+        BROADCAST_LEVELUP_EVERY = Settings.BROADCAST_LEVELUP_EVERY.getInt();
+        MAX_EXP = Settings.MAX_EXP.getDouble();
+        GRINDER_MAX = Settings.GRINDER_MAX.getInt();
+        GRINDER_INTERVAL = Settings.GRINDER_INTERVAL.getInt();
+        MAX_LEVEL = Settings.MAX_LEVEL.getInt();
+        LEVELING_FORMULA = Formula.valueOf(Settings.LEVELING_FORMULA.getString());
+        EXPONENTIAL_BASE = Settings.EXPONENTIAL_BASE.getDouble();
+        EXPONENTIAL_DIVISOR = Settings.EXPONENTIAL_DIVISOR.getDouble();
+        LINEAR_INCREMENT = Settings.LINEAR_INCREMENT.getDouble();
+        CUSTOM_FORMULA = Settings.CUSTOM_FORMULA.getString();
+    }
+
     private final UUID uuid;
 
     private double experience;
@@ -43,7 +75,7 @@ public class EPlayer {
     }
 
     public EPlayer(UUID uuid) {
-        this(uuid, Settings.START_EXP.getDouble(), 0, 0, 0, 0, 0);
+        this(uuid, START_EXP, 0, 0, 0, 0, 0);
     }
 
     public UUID getUniqueId() {
@@ -62,7 +94,7 @@ public class EPlayer {
 
         EpicLevels plugin = EpicLevels.getPlugin(EpicLevels.class);
         if (experience < 0L) {
-            if (this.experience + experience < 0L && !Settings.ALLOW_NEGATIVE.getBoolean()) {
+            if (this.experience + experience < 0L && !ALLOW_NEGATIVE) {
                 this.experience = 0L;
             } else {
                 this.experience = this.experience + experience;
@@ -77,7 +109,7 @@ public class EPlayer {
 
         this.experience += ((this.experience + experience < 0 ? 0 : experience) * multiplier()) * boostMultiplier;
 
-        double bonus = Settings.KILLSTREAK_BONUS_EXP.getDouble();
+        double bonus = KILLSTREAK_BONUS_EXP;
         this.experience += bonus * this.killStreak;
 
         Player player = getPlayer().getPlayer();
@@ -93,8 +125,8 @@ public class EPlayer {
                 Rewards.run(plugin.getLevelManager().getLevel(i).getRewards(), player, i, i == getLevel());
             }
 
-            if (Settings.SEND_BROADCAST_LEVELUP_MESSAGE.getBoolean()
-                    && getLevel() % Settings.BROADCAST_LEVELUP_EVERY.getInt() == 0) {
+            if (SEND_BROADCAST_LEVELUP_MESSAGE
+                    && getLevel() % BROADCAST_LEVELUP_EVERY == 0) {
                 for (Player pl : Bukkit.getOnlinePlayers().stream().filter(p -> p != player).collect(Collectors.toList())) {
                     plugin.getLocale().getMessage("event.levelup.announcement")
                             .processPlaceholder("player", player.getName())
@@ -103,15 +135,15 @@ public class EPlayer {
                 }
             }
         }
-        if (this.experience > Settings.MAX_EXP.getDouble()) {
-            this.experience = Settings.MAX_EXP.getDouble();
+        if (this.experience > MAX_EXP) {
+            this.experience = MAX_EXP;
         }
         return this.experience;
     }
 
     public boolean canGainExperience(UUID uuid) {
-        int triggerAmount = Settings.GRINDER_MAX.getInt();
-        int maxInterval = Settings.GRINDER_INTERVAL.getInt() * 1000;
+        int triggerAmount = GRINDER_MAX;
+        int maxInterval = GRINDER_INTERVAL * 1000;
 
         long killCount = this.kills.keySet()
                 .stream()
@@ -227,7 +259,7 @@ public class EPlayer {
 
     public int getLevel() {
         int lastLevel = 0;
-        for (int i = 1; i <= Settings.MAX_LEVEL.getInt(); i++) {
+        for (int i = 1; i <= MAX_LEVEL; i++) {
             if (experience(i) > this.experience) {
                 break;
             }
@@ -245,25 +277,25 @@ public class EPlayer {
     }
 
     public static double experience(int level) {
-        Formula formula = Formula.valueOf(Settings.LEVELING_FORMULA.getString());
+        Formula formula = LEVELING_FORMULA;
         switch (formula) {
             case EXPONENTIAL: {
                 double a = 0;
                 for (int i = 1; i < level; i++) {
-                    a += Math.floor(i + Settings.EXPONENTIAL_BASE.getDouble()
-                            * Math.pow(2, (i / Settings.EXPONENTIAL_DIVISOR.getDouble())));
+                    a += Math.floor(i + EXPONENTIAL_BASE
+                            * Math.pow(2, (i / EXPONENTIAL_DIVISOR)));
                 }
                 return Math.floor(a);
             }
             case LINEAR: {
                 double a = 0;
                 for (int i = 1; i < level; i++) {
-                    a += Settings.LINEAR_INCREMENT.getDouble();
+                    a += LINEAR_INCREMENT;
                 }
                 return a;
             }
             case CUSTOM: {
-                return Math.round(MathUtils.eval(Settings.CUSTOM_FORMULA.getString()
+                return Math.round(MathUtils.eval(CUSTOM_FORMULA
                         .replace("level", String.valueOf(level))));
             }
         }

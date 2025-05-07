@@ -29,6 +29,7 @@ import com.craftaro.epiclevels.listeners.DeathListeners;
 import com.craftaro.epiclevels.listeners.LoginListeners;
 import com.craftaro.epiclevels.managers.EntityManager;
 import com.craftaro.epiclevels.placeholder.PlaceholderManager;
+import com.craftaro.epiclevels.players.EPlayer;
 import com.craftaro.epiclevels.players.PlayerManager;
 import com.craftaro.epiclevels.settings.Settings;
 import com.craftaro.epiclevels.tasks.BoostTask;
@@ -154,6 +155,8 @@ public class EpicLevels extends SongodaPlugin {
     public void onConfigReload() {
         this.setLocale(getConfig().getString("System.Language Mode"), true);
         this.locale.reloadMessages();
+
+        EPlayer.reload();
 
         // Loading levels
         this.levelManager.load(this);

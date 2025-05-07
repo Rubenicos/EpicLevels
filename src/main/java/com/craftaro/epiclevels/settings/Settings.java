@@ -5,6 +5,7 @@ import com.craftaro.core.configuration.Config;
 import com.craftaro.core.configuration.ConfigSetting;
 import com.craftaro.core.hooks.EconomyManager;
 import com.craftaro.epiclevels.EpicLevels;
+import com.craftaro.epiclevels.players.EPlayer;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -178,5 +179,6 @@ public class Settings {
         }
 
         CONFIG.saveChanges();
+        EPlayer.reload();
     }
 }
