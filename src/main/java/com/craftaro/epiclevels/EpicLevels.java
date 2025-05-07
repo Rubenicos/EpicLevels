@@ -141,7 +141,10 @@ public class EpicLevels extends SongodaPlugin {
     }
 
     @Override
-    public void onDataLoad() {
+    public synchronized void onDataLoad() {
+        if (this.dataHelper != null) {
+            return;
+        }
         initDatabase(Collections.singletonList(new _1_InitialMigration(this)));
         this.dataHelper = new DataHelper(this);
 
@@ -198,6 +201,9 @@ public class EpicLevels extends SongodaPlugin {
     }
 
     public DataHelper getDataHelper() {
+        if (this.dataHelper == null) {
+            onDataLoad();
+        }
         return this.dataHelper;
     }
 
