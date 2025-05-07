@@ -17,30 +17,32 @@ public class PlaceholderManager extends PlaceholderExpansion {
     @Override
     public String onRequest(OfflinePlayer player, String params) {
         EPlayer ePlayer = this.plugin.getPlayerManager().getPlayer(player);
+        final String[] split = params.split("_");
+        final String arg1 = split.length > 1 ? split[1] : null;
 
-        switch (params) {
+        switch (split.length <= 1 ? params : split[0]) {
             case "level":
-                return Methods.formatDecimal(ePlayer.getLevel());
+                return Methods.formatDecimal(ePlayer.getLevel(), arg1);
             case "experience":
-                return Methods.formatDecimal(ePlayer.getExperience());
+                return Methods.formatDecimal(ePlayer.getExperience(), arg1);
             case "kills":
-                return Methods.formatDecimal(ePlayer.getKills());
+                return Methods.formatDecimal(ePlayer.getKills(), arg1);
             case "playerkills":
-                return Methods.formatDecimal(ePlayer.getPlayerKills());
+                return Methods.formatDecimal(ePlayer.getPlayerKills(), arg1);
             case "mobkills":
-                return Methods.formatDecimal(ePlayer.getMobKills());
+                return Methods.formatDecimal(ePlayer.getMobKills(), arg1);
             case "deaths":
-                return Methods.formatDecimal(ePlayer.getDeaths());
+                return Methods.formatDecimal(ePlayer.getDeaths(), arg1);
             case "killstreak":
-                return Methods.formatDecimal(ePlayer.getKillStreak());
+                return Methods.formatDecimal(ePlayer.getKillStreak(), arg1);
             case "bestkillstreak":
-                return Methods.formatDecimal(ePlayer.getBestKillStreak());
+                return Methods.formatDecimal(ePlayer.getBestKillStreak(), arg1);
             case "kdr":
-                return Methods.formatDecimal(ePlayer.getDeaths() == 0 ? ePlayer.getPlayerKills() : (double) ePlayer.getPlayerKills() / (double) ePlayer.getDeaths());
+                return Methods.formatDecimal(ePlayer.getDeaths() == 0 ? ePlayer.getPlayerKills() : (double) ePlayer.getPlayerKills() / (double) ePlayer.getDeaths(), arg1);
             case "nextlevel":
-                return Methods.formatDecimal(ePlayer.getLevel() + 1);
+                return Methods.formatDecimal(ePlayer.getLevel() + 1, arg1);
             case "neededfornextlevel":
-                return Methods.formatDecimal(EPlayer.experience(ePlayer.getLevel() + 1) - ePlayer.getExperience());
+                return Methods.formatDecimal(EPlayer.experience(ePlayer.getLevel() + 1) - ePlayer.getExperience(), arg1);
             case "boosterenabled":
                 return this.plugin.getBoostManager().getBoost(ePlayer.getUniqueId()) == null
                         ? this.plugin.getLocale().getMessage("general.word.enabled").toText()
@@ -49,7 +51,7 @@ public class PlaceholderManager extends PlaceholderExpansion {
                 if (this.plugin.getBoostManager().getBoost(ePlayer.getUniqueId()) == null) {
                     return "1";
                 }
-                return Methods.formatDecimal(this.plugin.getBoostManager().getBoost(ePlayer.getUniqueId()).getMultiplier());
+                return Methods.formatDecimal(this.plugin.getBoostManager().getBoost(ePlayer.getUniqueId()).getMultiplier(), arg1);
             case "globalboosterenabled":
                 return this.plugin.getBoostManager().getGlobalBoost() == null
                         ? this.plugin.getLocale().getMessage("general.word.enabled").toText()
@@ -58,7 +60,7 @@ public class PlaceholderManager extends PlaceholderExpansion {
                 if (this.plugin.getBoostManager().getGlobalBoost() == null) {
                     return "1";
                 }
-                return Methods.formatDecimal(this.plugin.getBoostManager().getGlobalBoost().getMultiplier());
+                return Methods.formatDecimal(this.plugin.getBoostManager().getGlobalBoost().getMultiplier(), arg1);
             case "progressbar":
                 double exp = ePlayer.getExperience() - EPlayer.experience(ePlayer.getLevel());
                 double nextLevel = EPlayer.experience(ePlayer.getLevel() + 1) - EPlayer.experience(ePlayer.getLevel());
